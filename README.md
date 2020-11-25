@@ -60,3 +60,32 @@ https://www.cnblogs.com/maociping/p/6633948.html
 https://www.jianshu.com/p/9a5e7c935273
 
 1. 在安装python的相关模块和库时，我们一般使用```pip install  模块名```或者```python setup.py install```，前者是在线安装，会安装该包的相关依赖包；后者是下载源码包然后在本地安装，不会安装该包的相关依赖包。一般安装普通包，pip install XXX简单够用；但是，在编写系统时，想要把相关依赖包（有些是自己写的模块，在线找不到，又或者目标机器无法联网）一起打包发布，就需要使用setup.py方式了，只需在 setup.py 文件中写明**依赖的库和版本**，然后到目标机器上使用python setup.py install安装
+
+2. 关于setup.py()的find_package参数：
+https://www.cnblogs.com/potato-chip/p/9106225.html
+--package_dir 告诉setuptools哪些目录下的文件被映射到哪个源码包。一个例子：package_dir = {'': 'lib'}，表示“root package”中的模块都在lib 目录中。
+--find_packages() 对于简单工程来说，手动增加packages参数很容易，刚刚我们用到了这个函数，它默认在和setup.py同一目录下搜索各个含有 init.py的包。
+其实我们可以**将包统一放在一个src目录中**，另外，这个包内可能还有aaa.txt文件和data数据文件夹。另外，也可以排除一些特定的包
+find_packages(exclude=[".tests", ".tests.", "tests.", "tests"])
+--install_requires = ["requests"] 需要安装的依赖包
+--entry_points 动态发现服务和插件
+
+个人对使用packages相关参数的看法，
+首先告诉程序去哪个目录中找包，因此有了packages参数，
+其次，告诉程序我包的起始路径是怎么样的，因此有了package_dir参数
+最后，找到包以后，我应该把哪些文件打到包里面，因此有了package_data参数
+```
+setup(
+name = "demo",
+version = "0.1",
+# 包含所有src目录下的包 ---------项目中的所有源码和测试用例文件目录一般都存放在统一的src目录下方便管理，默认也是创建src目录
+packages = find_packages('src'),
+package_dir = {'':'src'},
+package_data = {
+# 包含所有.txt文件
+'':['.txt'],
+# 包含data目录下所有的.dat文件
+'test':['data/.dat'],
+}
+)
+```
