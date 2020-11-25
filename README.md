@@ -54,3 +54,9 @@
   分值：1 分
 
 以上测试通过后，会在 `Feedback` 中打印相关信息（包括 PyPI 链接，生成图片），但不会对 `PyPI`、`Read the Docs` 自动测试
+
+## 一些思考笔记：
+https://www.cnblogs.com/maociping/p/6633948.html
+https://www.jianshu.com/p/9a5e7c935273
+
+1. 在安装python的相关模块和库时，我们一般使用```pip install  模块名```或者```python setup.py install```，前者是在线安装，会安装该包的相关依赖包；后者是下载源码包然后在本地安装，不会安装该包的相关依赖包。一般安装普通包，pip install XXX简单够用；但是，在编写系统时，想要把相关依赖包（有些是自己写的模块，在线找不到，又或者目标机器无法联网）一起打包发布，就需要使用setup.py方式了，只需在 setup.py 文件中写明**依赖的库和版本**，然后到目标机器上使用python setup.py install安装
